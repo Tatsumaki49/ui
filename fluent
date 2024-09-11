@@ -317,7 +317,7 @@ end
 -- AutoSaveToggle for enabling/disabling auto-save
 local autoSaveEnabled = false
 local AutoSaveToggle
-AutoSaveToggle = section:AddButton({
+AutoSaveToggle = section:AddToggle({
 	Title = "Toggle Auto Save",
 	Description = "Auto Save is currently disabled",
 	Callback = function()
