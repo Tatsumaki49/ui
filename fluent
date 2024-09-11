@@ -428,3 +428,15 @@ local SaveManager = {} do
 		self:LoadAutoloadConfig()
 	end
 end
+if isfile(self.Folder .. "/settings/autoload.txt") then
+			local name = readfile(self.Folder .. "/settings/autoload.txt")
+			AutoloadButton:SetDesc("Current autoload config: " .. name)
+		end
+
+		SaveManager:SetIgnoreIndexes({ "SaveManager_ConfigList", "SaveManager_ConfigName" })
+	end
+
+	SaveManager:BuildFolderTree()
+end
+
+return SaveManager
