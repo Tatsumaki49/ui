@@ -3,138 +3,136 @@ local coregui = cloneref(game:GetService("CoreGui"))
 local gui = coregui:FindFirstChild("TatsumakiHub")
 module.gui = gui
 function module.setup()
-    if gui then
-        return
-    end
+    if not gui then
+        local v1 = game:GetService("UserInputService")
+        local v2 = game:GetService("RunService")
+        local TweenService = game:GetService("TweenService")
 
-    local v1 = game:GetService("UserInputService")
-    local v2 = game:GetService("RunService")
-    local TweenService = game:GetService("TweenService")
+        local v3 = Instance.new("ScreenGui")
+        v3.Name = "TatsumakiHub"
+        v3.IgnoreGuiInset = true
+        v3.DisplayOrder = 9999999
+        v3.ResetOnSpawn = false
+        v3.Parent = coregui
 
-    local v3 = Instance.new("ScreenGui")
-    v3.Name = "TatsumakiHub"
-    v3.IgnoreGuiInset = true
-    v3.DisplayOrder = 9999999
-    v3.ResetOnSpawn = false
-    v3.Parent = coregui
+        local v4 = Instance.new("ImageButton", v3)
+        v4.Name = "LCtrl"
+        v4.Size = UDim2.new(0, 50, 0, 50)
+        v4.Image = "rbxassetid://14268346195"
+        v4.Active = true
+        v4.Selectable = false
+        v4.Selected = false
+        v4.ZIndex = 9999999
+        v4.BackgroundColor3 = Color3.new(1, 255, 1)
+        v4.ScaleType = Enum.ScaleType.Fit
 
-    local v4 = Instance.new("ImageButton", v3)
-    v4.Name = "LCtrl"
-    v4.Size = UDim2.new(0, 50, 0, 50)
-    v4.Image = "rbxassetid://14268346195"
-    v4.Active = true
-    v4.Selectable = false
-    v4.Selected = false
-    v4.ZIndex = 9999999
-    v4.BackgroundColor3 = Color3.new(1, 255, 1)
-    v4.ScaleType = Enum.ScaleType.Fit
-
-    local v5 = Instance.new("Frame")
-    v5.Size = UDim2.new(1, 0, 1, 0)
-    v5.BackgroundColor3 = Color3.new(0, 0, 0)
-    v5.BackgroundTransparency = 1
-    v5.ZIndex = v4.ZIndex + 1
-    v5.AnchorPoint = Vector2.new(0.5, 0.5)
-    v5.Position = UDim2.new(0.5, 0, 0.5, 0)
-    v5.Parent = v4
-
-    local v6 = Instance.new("UICorner")
-    v6.CornerRadius = UDim.new(0, 8)
-    v6.Parent = v5
-
-    v4.MouseEnter:Connect(function()
-        v5.BackgroundTransparency = 0.8
-    end)
-
-    v4.MouseLeave:Connect(function()
+        local v5 = Instance.new("Frame")
+        v5.Size = UDim2.new(1, 0, 1, 0)
+        v5.BackgroundColor3 = Color3.new(0, 0, 0)
         v5.BackgroundTransparency = 1
-    end)
+        v5.ZIndex = v4.ZIndex + 1
+        v5.AnchorPoint = Vector2.new(0.5, 0.5)
+        v5.Position = UDim2.new(0.5, 0, 0.5, 0)
+        v5.Parent = v4
 
-    local v7 = Instance.new("UICorner")
-    v7.CornerRadius = UDim.new(0, 8)
-    v7.Parent = v4
+        local v6 = Instance.new("UICorner")
+        v6.CornerRadius = UDim.new(0, 8)
+        v6.Parent = v5
 
-    local v8 = Instance.new("ImageButton", v3)
-    v8.Name = "abc"
-    v8.Size = UDim2.new(0, 1, 0, 1)
-    v8.Image = "rbxassetid://14268346195"
-    v8.Active = true
-    v8.ZIndex = 9999998
+        v4.MouseEnter:Connect(function()
+            v5.BackgroundTransparency = 0.8
+        end)
 
-    local v9 = workspace.CurrentCamera.ViewportSize
-    local v10 = v4.Size.X.Offset
-    local v11 = v8.Size.X.Offset
-    v4.Position = UDim2.new(0.5, -v10 / 2, 0, 20)
-    v8.Position = UDim2.new(0.5, -v11 / 2, 0, 0)
+        v4.MouseLeave:Connect(function()
+            v5.BackgroundTransparency = 1
+        end)
 
-    local v12, v13, v14, v15, v16 = nil, nil, nil, nil, 8
+        local v7 = Instance.new("UICorner")
+        v7.CornerRadius = UDim.new(0, 8)
+        v7.Parent = v4
 
-    local function v17(a, b, m)
-        return a + (b - a) * m
-    end
+        local v8 = Instance.new("ImageButton", v3)
+        v8.Name = "abc"
+        v8.Size = UDim2.new(0, 1, 0, 1)
+        v8.Image = "rbxassetid://14268346195"
+        v8.Active = true
+        v8.ZIndex = 9999998
 
-    local v18, v19
+        local v9 = workspace.CurrentCamera.ViewportSize
+        local v10 = v4.Size.X.Offset
+        local v11 = v8.Size.X.Offset
+        v4.Position = UDim2.new(0.5, -v10 / 2, 0, 20)
+        v8.Position = UDim2.new(0.5, -v11 / 2, 0, 0)
 
-    local function v20(dt)
-        if not v15 then return end
-        if not v12 and v19 then
-            v4.Position = UDim2.new(v15.X.Scale, v17(v4.Position.X.Offset, v19.X.Offset, dt * v16),
-                v15.Y.Scale, v17(v4.Position.Y.Offset, v19.Y.Offset, dt * v16))
-            return
+        local v12, v13, v14, v15, v16 = nil, nil, nil, nil, 8
+
+        local function v17(a, b, m)
+            return a + (b - a) * m
         end
 
-        local v21 = v18 - v1:GetMouseLocation()
-        local v22 = v15.X.Offset - v21.X
-        local v23 = v15.Y.Offset - v21.Y
-        v19 = UDim2.new(v15.X.Scale, v22, v15.Y.Scale, v23)
-        v4.Position = UDim2.new(v15.X.Scale, v17(v4.Position.X.Offset, v22, dt * v16),
-            v15.Y.Scale, v17(v4.Position.Y.Offset, v23, dt * v16))
-    end
+        local v18, v19
 
-    v4.InputBegan:Connect(function(v24)
-        if v24.UserInputType == Enum.UserInputType.MouseButton1 or v24.UserInputType == Enum.UserInputType.Touch then
-            v12 = true
-            v14 = v24.Position
-            v15 = v4.Position
-            v18 = v1:GetMouseLocation()
+        local function v20(dt)
+            if not v15 then return end
+            if not v12 and v19 then
+                v4.Position = UDim2.new(v15.X.Scale, v17(v4.Position.X.Offset, v19.X.Offset, dt * v16),
+                    v15.Y.Scale, v17(v4.Position.Y.Offset, v19.Y.Offset, dt * v16))
+                return
+            end
 
-            v24.Changed:Connect(function()
-                if v24.UserInputState == Enum.UserInputState.End then
-                    v12 = false
-                end
-            end)
+            local v21 = v18 - v1:GetMouseLocation()
+            local v22 = v15.X.Offset - v21.X
+            local v23 = v15.Y.Offset - v21.Y
+            v19 = UDim2.new(v15.X.Scale, v22, v15.Y.Scale, v23)
+            v4.Position = UDim2.new(v15.X.Scale, v17(v4.Position.X.Offset, v22, dt * v16),
+                v15.Y.Scale, v17(v4.Position.Y.Offset, v23, dt * v16))
         end
-    end)
 
-    v4.InputChanged:Connect(function(v25)
-        if v25.UserInputType == Enum.UserInputType.MouseMovement or v25.UserInputType == Enum.UserInputType.Touch then
-            v13 = v25
-        end
-    end)
+        v4.InputBegan:Connect(function(v24)
+            if v24.UserInputType == Enum.UserInputType.MouseButton1 or v24.UserInputType == Enum.UserInputType.Touch then
+                v12 = true
+                v14 = v24.Position
+                v15 = v4.Position
+                v18 = v1:GetMouseLocation()
 
-    v2.Heartbeat:Connect(v20)
+                v24.Changed:Connect(function()
+                    if v24.UserInputState == Enum.UserInputState.End then
+                        v12 = false
+                    end
+                end)
+            end
+        end)
 
-    local cv4 = v2.RenderStepped:Connect(function()
-        if not v4.Visible then
-            v4.Visible = true
-        end
-        if v4.Selectable then
-            v4.Selectable = false
-        end
-        if v4.Selected then
-            v4.Selected = false
-        end
-        if not v3.Enabled then
-            v3.Enabled = true
-        end
-        if not v8.Visible then
-            v8.Visible = true
-        end
-    end)
+        v4.InputChanged:Connect(function(v25)
+            if v25.UserInputType == Enum.UserInputType.MouseMovement or v25.UserInputType == Enum.UserInputType.Touch then
+                v13 = v25
+            end
+        end)
 
-    function module.hide(callback)
-        if typeof(callback) == "function" then
-            v4.MouseButton1Click:Connect(callback)
+        v2.Heartbeat:Connect(v20)
+
+        local cv4 = v2.RenderStepped:Connect(function()
+            if not v4.Visible then
+                v4.Visible = true
+            end
+            if v4.Selectable then
+                v4.Selectable = false
+            end
+            if v4.Selected then
+                v4.Selected = false
+            end
+            if not v3.Enabled then
+                v3.Enabled = true
+            end
+            if not v8.Visible then
+                v8.Visible = true
+            end
+        end)
+
+        function module.hide(callback)
+            if typeof(callback) == "function" then
+                v4.MouseButton1Click:Connect(callback)
+            end
         end
     end
 
