@@ -1,7 +1,7 @@
 local module = {}
 local coregui = cloneref(game:GetService("CoreGui"))
 local gui = coregui:FindFirstChild("TatsumakiHub")
-module.gui = gui
+
 function module.setup()
     if not gui then
         local v1 = game:GetService("UserInputService")
@@ -135,7 +135,7 @@ function module.setup()
             end
         end
     end
-
+    module.gui = gui
     return function()
         return module
     end
