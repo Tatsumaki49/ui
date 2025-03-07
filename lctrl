@@ -133,8 +133,8 @@ function module.setup()
         end
     end)
 
-    function module.hide()
-        v4.MouseButton1Click:Connect(function()
+    function module.hide(Window)
+        v4.MouseButton1Click:Connect(function(Window)
             Window:Minimize()
         end)
     end
