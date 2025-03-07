@@ -133,13 +133,9 @@ function module.hide()
         end
     end)
 
-    function lctrlsss()
-        local VirtualInputManager = game:GetService("VirtualInputManager")
-        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.LeftControl, false, game)
-        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.LeftControl, false, game)
-    end
-
-    v4.MouseButton1Click:Connect(lctrlsss)
+    v4.MouseButton1Click:Connect(function(...)
+        
+    end)
 
     return function()
         return cv4
