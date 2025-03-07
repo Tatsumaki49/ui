@@ -133,14 +133,14 @@ function module.setup()
         end
     end)
 
-    function module.hide(Window)
-        v4.MouseButton1Click:Connect(function(Window)
-            Window:Minimize()
-        end)
+    function module.hide(callback)
+        if typeof(callback) == "function" then
+            v4.MouseButton1Click:Connect(callback)
+        end
     end
 
     return function()
-        return cv4,v3,v4
+        return module
     end
 end
 
