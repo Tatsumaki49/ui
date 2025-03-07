@@ -136,6 +136,7 @@ function module.setup()
     function module.hide(args)
         v4.MouseButton1Click:Connect(function(args)
             args = args
+            print(args)
         end)
     end
 
