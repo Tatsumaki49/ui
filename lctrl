@@ -1,8 +1,9 @@
 local module = {}
 local coregui = cloneref(game:GetService("CoreGui"))
-module.gui = coregui:FindFirstChild("TatsumakiHub")
+local gui = coregui:FindFirstChild("TatsumakiHub")
+module.gui = gui
 function module.setup()
-    if module.gui then
+    if gui then
         return
     end
 
