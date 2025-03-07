@@ -1,6 +1,6 @@
 local module = {}
 
-function module.hide()
+function module.setup()
     local coregui = cloneref(game:GetService("CoreGui"))
     local screensssss = coregui:FindFirstChild("TatsumakiHub")
 
@@ -133,9 +133,11 @@ function module.hide()
         end
     end)
 
-    v4.MouseButton1Click:Connect(function(...)
-        
-    end)
+    function module.hide(args)
+        v4.MouseButton1Click:Connect(function(args)
+            
+        end)
+    end
 
     return function()
         return cv4
