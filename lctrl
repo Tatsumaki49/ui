@@ -140,6 +140,11 @@ function module.setup()
             end
         end        
     end
+    function module.destroy()
+        if gui then
+            gui:Destroy()
+        end
+    end 
     module.gui = gui
     return function()
         return module
