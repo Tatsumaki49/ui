@@ -134,6 +134,11 @@ function module.setup()
                 v4.MouseButton1Click:Connect(callback)
             end
         end
+        function module.image(arg)
+            if typeof(arg) == "string" then
+                v4.Image = arg
+            end
+        end        
     end
     module.gui = gui
     return function()
