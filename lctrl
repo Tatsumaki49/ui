@@ -1,12 +1,14 @@
 local module = {}
 
+local button
+local gui
+
 function module.setup()
     local coregui = cloneref(game:GetService("CoreGui"))
-    local gui = coregui:FindFirstChild("TatsumakiHub")
+    gui = coregui:FindFirstChild("TatsumakiHub")
     if not gui then
         local v1 = game:GetService("UserInputService")
         local v2 = game:GetService("RunService")
-        local TweenService = game:GetService("TweenService")
 
         local v3 = Instance.new("ScreenGui")
         v3.Name = "TatsumakiHub"
@@ -14,6 +16,7 @@ function module.setup()
         v3.DisplayOrder = 9999999
         v3.ResetOnSpawn = false
         v3.Parent = coregui
+        gui = v3
 
         local v4 = Instance.new("ImageButton", v3)
         v4.Name = "LCtrl"
@@ -25,6 +28,7 @@ function module.setup()
         v4.ZIndex = 9999999
         v4.BackgroundColor3 = Color3.new(1, 255, 1)
         v4.ScaleType = Enum.ScaleType.Fit
+        button = v4
 
         local v5 = Instance.new("Frame")
         v5.Size = UDim2.new(1, 0, 1, 0)
@@ -42,7 +46,6 @@ function module.setup()
         v4.MouseEnter:Connect(function()
             v5.BackgroundTransparency = 0.8
         end)
-
         v4.MouseLeave:Connect(function()
             v5.BackgroundTransparency = 1
         end)
@@ -58,60 +61,52 @@ function module.setup()
         v8.Active = true
         v8.ZIndex = 9999998
 
-        local v9 = workspace.CurrentCamera.ViewportSize
         local v10 = v4.Size.X.Offset
         local v11 = v8.Size.X.Offset
         v4.Position = UDim2.new(0.5, -v10 / 2, 0, 20)
         v8.Position = UDim2.new(0.5, -v11 / 2, 0, 0)
 
-        local v12, v13, v14, v15, v16 = nil, nil, nil, nil, 8
+        local dragging, dragStart, startPos, targetPos
+        local speed = 8
 
-        local function v17(a, b, m)
+        local function lerp(a, b, m)
             return a + (b - a) * m
         end
 
-        local v18, v19
+        local mouseStart, dragTarget
 
-        local function v20(dt)
-            if not v15 then return end
-            if not v12 and v19 then
-                v4.Position = UDim2.new(v15.X.Scale, v17(v4.Position.X.Offset, v19.X.Offset, dt * v16),
-                    v15.Y.Scale, v17(v4.Position.Y.Offset, v19.Y.Offset, dt * v16))
+        local function update(dt)
+            if not startPos then return end
+            if not dragging and dragTarget then
+                v4.Position = UDim2.new(startPos.X.Scale, lerp(v4.Position.X.Offset, dragTarget.X.Offset, dt * speed),
+                    startPos.Y.Scale, lerp(v4.Position.Y.Offset, dragTarget.Y.Offset, dt * speed))
                 return
             end
-
-            local v21 = v18 - v1:GetMouseLocation()
-            local v22 = v15.X.Offset - v21.X
-            local v23 = v15.Y.Offset - v21.Y
-            v19 = UDim2.new(v15.X.Scale, v22, v15.Y.Scale, v23)
-            v4.Position = UDim2.new(v15.X.Scale, v17(v4.Position.X.Offset, v22, dt * v16),
-                v15.Y.Scale, v17(v4.Position.Y.Offset, v23, dt * v16))
+            local delta = mouseStart - v1:GetMouseLocation()
+            local newX = startPos.X.Offset - delta.X
+            local newY = startPos.Y.Offset - delta.Y
+            dragTarget = UDim2.new(startPos.X.Scale, newX, startPos.Y.Scale, newY)
+            v4.Position = UDim2.new(startPos.X.Scale, lerp(v4.Position.X.Offset, newX, dt * speed),
+                startPos.Y.Scale, lerp(v4.Position.Y.Offset, newY, dt * speed))
         end
 
-        v4.InputBegan:Connect(function(v24)
-            if v24.UserInputType == Enum.UserInputType.MouseButton1 or v24.UserInputType == Enum.UserInputType.Touch then
-                v12 = true
-                v14 = v24.Position
-                v15 = v4.Position
-                v18 = v1:GetMouseLocation()
-
-                v24.Changed:Connect(function()
-                    if v24.UserInputState == Enum.UserInputState.End then
-                        v12 = false
+        v4.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragging = true
+                dragStart = input.Position
+                startPos = v4.Position
+                mouseStart = v1:GetMouseLocation()
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then
+                        dragging = false
                     end
                 end)
             end
         end)
 
-        v4.InputChanged:Connect(function(v25)
-            if v25.UserInputType == Enum.UserInputType.MouseMovement or v25.UserInputType == Enum.UserInputType.Touch then
-                v13 = v25
-            end
-        end)
+        v2.Heartbeat:Connect(update)
 
-        v2.Heartbeat:Connect(v20)
-
-        local cv4 = v2.RenderStepped:Connect(function()
+        v2.RenderStepped:Connect(function()
             if not v4.Visible then
                 v4.Visible = true
             end
@@ -128,26 +123,24 @@ function module.setup()
                 v8.Visible = true
             end
         end)
-
-        function module.hide(callback)
-            if typeof(callback) == "function" then
-                v4.MouseButton1Click:Connect(callback)
-            end
-        end
-        function module.image(arg)
-            if typeof(arg) == "string" then
-                v4.Image = arg
-            end
-        end        
     end
-    function module.destroy()
-        if gui then
-            gui:Destroy()
-        end
-    end 
-    module.gui = gui
-    return function()
-        return module
+end
+
+function module.hide(callback)
+    if button and typeof(callback) == "function" then
+        button.MouseButton1Click:Connect(callback)
+    end
+end
+
+function module.image(arg)
+    if button and typeof(arg) == "string" then
+        button.Image = arg
+    end
+end
+
+function module.destroy()
+    if gui then
+        gui:Destroy()
     end
 end
 
