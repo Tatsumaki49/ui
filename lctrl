@@ -2,6 +2,7 @@ local module = {}
 
 local button
 local gui
+local bool = true
 
 function module.setup()
     local coregui = cloneref(game:GetService("CoreGui"))
@@ -82,16 +83,18 @@ function module.setup()
                     startPos.Y.Scale, lerp(v4.Position.Y.Offset, dragTarget.Y.Offset, dt * speed))
                 return
             end
-            local delta = mouseStart - v1:GetMouseLocation()
-            local newX = startPos.X.Offset - delta.X
-            local newY = startPos.Y.Offset - delta.Y
-            dragTarget = UDim2.new(startPos.X.Scale, newX, startPos.Y.Scale, newY)
-            v4.Position = UDim2.new(startPos.X.Scale, lerp(v4.Position.X.Offset, newX, dt * speed),
-                startPos.Y.Scale, lerp(v4.Position.Y.Offset, newY, dt * speed))
+            if bool and dragging then
+                local delta = mouseStart - v1:GetMouseLocation()
+                local newX = startPos.X.Offset - delta.X
+                local newY = startPos.Y.Offset - delta.Y
+                dragTarget = UDim2.new(startPos.X.Scale, newX, startPos.Y.Scale, newY)
+                v4.Position = UDim2.new(startPos.X.Scale, lerp(v4.Position.X.Offset, newX, dt * speed),
+                    startPos.Y.Scale, lerp(v4.Position.Y.Offset, newY, dt * speed))
+            end
         end
 
         v4.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            if bool and (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                 dragging = true
                 dragStart = input.Position
                 startPos = v4.Position
@@ -135,6 +138,12 @@ end
 function module.image(arg)
     if button and typeof(arg) == "string" then
         button.Image = arg
+    end
+end
+
+function module.movemeble(arg)
+    if typeof(arg) == "boolean" then
+        bool = arg
     end
 end
 
