@@ -153,4 +153,10 @@ function module.destroy()
     end
 end
 
+function module.cn(arg)
+    if gui then
+        gui.Name = tostring(arg)
+    end
+end
+
 return module
