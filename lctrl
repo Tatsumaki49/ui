@@ -28,6 +28,7 @@ function module.setup()
         v4.Selected = false
         v4.ZIndex = 9999999
         v4.BackgroundColor3 = Color3.new(1, 255, 1)
+        v4.BackgroundTransparency = 1
         v4.ScaleType = Enum.ScaleType.Fit
         button = v4
 
